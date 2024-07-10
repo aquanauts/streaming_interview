@@ -100,4 +100,4 @@ In response to this, your program should output a message confirming that the da
 * If the program encounters an unknown message type, it should raise an informative exception
 * `process_events` must remain a [generator](https://wiki.python.org/moin/Generators) which lazily evaluates the input. Do not hold all the input data in memory.
 * You should handle messages in any order. Control messages received when no sample data is present (at program start or after a `reset`) should be ignored.
-* Before submitting your solution, be sure to that all tests and linters pass by running `make test`.
+* Before submitting your solution, be sure to that all tests and linters pass by running `make test`. You can use `make watch` to run this process continuously as you work.

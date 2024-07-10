@@ -37,18 +37,29 @@ $(DEPS): environment.yml $(PYTHON)
 	cp environment.yml $(DEPS)
 
 .PHONY: clean
-clean: ## Remove virtual environment and caches
+clean:
 	rm -rf $(MICRO_MAMBA)
 	rm -rf $(VENV)
 	find . -name __pycache__ | xargs --no-run-if-empty rm -rf
 
-.PHONY: deps
-deps: $(DEPS)  ## install the project dependencies
-
-.PHONY: test
-test: deps ## run all the test type things
+.PHONY: pytest
+pytest: deps
 	$(PYTHON_CMD) -m pytest --ignore $(VENV)
 
+.PHONY: mypy
+mypy: deps
+	$(PYTHON_CMD) -m mypy interview
+
+.PHONY: pylint
+pylint: deps
+	$(PYTHON_CMD) -m pylint interview
+
+.PHONY: deps
+deps: $(DEPS)
+
+.PHONY: test
+test: pytest pylint mypy ## run unit tests and linters
+
 .PHONY: watch
-watch: deps ## run unit tests in a continuous loop
-	$(PYTHON_CMD) -m pytest_watch --runner $(VENV_BIN)/pytest --ignore $(VENV)
+watch: deps ## run unit tests and linters continuously
+	$(PYTHON_CMD) -m pytest_watch --onpass "make mypy pylint" --runner $(VENV_BIN)/pytest --ignore $(VENV)
