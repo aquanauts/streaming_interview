@@ -1,0 +1,12 @@
+---
+name: streaming_interview
+
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pytest=8.2.2
+  - mypy=1.10.0
+  - pip:
+    - pytest-watch==4.2.0
