@@ -1,5 +1,5 @@
 
-# Aquatic's Streaming Python Interview
+# Aquatic's Streaming Python Test
 
 Thank you for taking the time to apply for a position at Aquatic Capital Management. Please solve the problem described below, and submit your solution. We expect that solving it will take you an hour or two. Here are some criteria we'll use to evaluate your solution:
 
