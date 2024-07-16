@@ -23,7 +23,7 @@ FORCE:
 $(MAMBA):
 	echo "Installing Mamba..."
 	mkdir -p "$(MICRO_MAMBA)"
-	curl -Ls https://micro.mamba.pm/api/micromamba/$(PLATFORM)-$(ARCH)/latest | tar -xj -C "$(MICRO_MAMBA)" --strip-components=1 bin/micromamba
+	curl -Ls https://micro.mamba.pm/api/micromamba/$(PLATFORM)-$(ARCH)/1.5.8 | tar -xj -C "$(MICRO_MAMBA)" --strip-components=1 bin/micromamba
 
 $(PYTHON): | $(MAMBA)
 	echo "Installing Python..."
