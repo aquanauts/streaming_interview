@@ -9,5 +9,6 @@
                 "ms-vsliveshare.vsliveshare"
             ]
         }
-    }
+    },
+    "postCreateCommand": "make test"
 }
