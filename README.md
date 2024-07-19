@@ -101,3 +101,9 @@ In response to this, your program should output a message confirming that the da
 * `process_events` must remain a [generator](https://wiki.python.org/moin/Generators) which lazily evaluates the input. Do not hold all the input data in memory.
 * You should handle messages in any order. Control messages received when no sample data is present (at program start or after a `reset`) should be ignored.
 * Before submitting your solution, be sure to that all tests and linters pass by running `make test`. You can use `make watch` to run this process continuously as you work.
+
+### Project Environment
+
+This repository includes development tools that can install Python environments, run unit tests and linters, and other tasks. These tools are similar to those we use in research and trading systems at Aquatic. We've provided it to you to make this problem easier to solve, and using these tools effectively is part of the interview process.
+
+The main interface to these tools is the [Makefile](./Makefile), which provides a number of useful targets. Running [make](https://en.wikipedia.org/wiki/Make_(software)) with no arguments in the root of the repository will list the available targets, and running `make <target name>` will execute that target. We expect that running these make targets on a Linux or OSX computer will automatically install whatever tools are necessary for the target. If you encounter problems while running these tools, do your best to troubleshoot them on your own. If you believe the problem to be an issue with the repository, feel free to contact us.
