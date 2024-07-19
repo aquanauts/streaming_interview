@@ -6,7 +6,8 @@
                 "ms-python.python",
                 "ms-python.vscode-pylance",
                 "ms-vscode.go",
-                "ms-vsliveshare.vsliveshare"
+                "ms-vsliveshare.vsliveshare",
+                "ms-vscode.makefile-tools"
             ]
         }
     }
