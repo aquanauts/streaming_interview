@@ -1,6 +1,6 @@
 MAKEFLAGS += --warn-undefined-variables
 MICRO_MAMBA := $(CURDIR)/.micromamba
-MAMBA := $(shell which conda || echo $(MICRO_MAMBA)/micromamba)
+MAMBA := $(MICRO_MAMBA)/micromamba
 SHELL := $(shell which bash) -o pipefail
 VENV := $(CURDIR)/venv
 DEPS := $(VENV)/.deps
@@ -25,7 +25,11 @@ $(MAMBA):
 	mkdir -p "$(MICRO_MAMBA)"
 	curl -Ls https://micro.mamba.pm/api/micromamba/$(PLATFORM)-$(ARCH)/1.5.8 | tar -xj -C "$(MICRO_MAMBA)" --strip-components=1 bin/micromamba
 
-$(DEPS): environment.yml $(MAMBA)
+$(PYTHON): | $(MAMBA)
+	echo "Installing Python..."
+	$(MAMBA) create --quiet --yes -p $(VENV)
+
+$(DEPS): environment.yml $(PYTHON)
 	echo "Installing dependencies..."
 	rm -rf $(VENV)
 	$(MAMBA) create --quiet --yes -p $(VENV)
@@ -55,9 +59,6 @@ deps: $(DEPS)
 
 .PHONY: test
 test: pytest pylint mypy ## run unit tests and linters
-
-.PHONY: all
-all: test
 
 .PHONY: watch
 watch: deps ## run unit tests and linters continuously
