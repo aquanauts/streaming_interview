@@ -10,7 +10,8 @@
             ],
             "settings": {
                 "python.terminal.activateEnvInCurrentTerminal": true,
-                "python.defaultInterpreterPath": ".venv/bin/python"
+                "python.defaultInterpreterPath": ".venv/bin/python",
+                "python.venvPath": ".venv"
             }
         }
     }
