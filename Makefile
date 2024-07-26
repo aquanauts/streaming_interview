@@ -44,7 +44,7 @@ clean:
 
 .PHONY: pytest
 pytest: deps
-	$(PYTHON_CMD) -m pytest --ignore $(VENV)
+	$(PYTHON_CMD) -m pytest -vv --ignore $(VENV)
 
 .PHONY: mypy
 mypy: deps
@@ -59,6 +59,10 @@ deps: $(DEPS)
 
 .PHONY: test
 test: pytest pylint mypy ## run unit tests and linters
+
+.PHONY: build
+build: test
+	$(VENV)/bin/pytest --cov-report html:reports --cov=interview interview/
 
 .PHONY: watch
 watch: deps ## run unit tests and linters continuously
