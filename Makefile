@@ -60,10 +60,13 @@ deps: $(DEPS)
 .PHONY: test
 test: pytest pylint mypy ## run unit tests and linters
 
-.PHONY: build
-build: test
+.PHONY: coverage
+coverage: deps
 	$(VENV)/bin/pytest --cov-report html:reports --cov=interview interview/
 
+.PHONY: build
+build: coverage test
+
 .PHONY: watch
-watch: deps ## run unit tests and linters continuously
-	$(PYTHON_CMD) -m pytest_watch --onpass "make mypy pylint" --runner $(VENV_BIN)/pytest --ignore $(VENV)
+watch: deps ## run unit tests continuously
+	$(PYTHON_CMD) -m pytest_watcher --ignore-patterns "$(VENV)/*" --now --runner $(VENV_BIN)/pytest interview
