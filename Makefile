@@ -61,7 +61,7 @@ deps: $(DEPS)
 test: pytest pylint mypy ## run unit tests and linters
 
 .PHONY: coverage
-coverage:
+coverage: deps
 	$(VENV)/bin/pytest --cov-report html:reports --cov=interview interview/
 
 .PHONY: build
