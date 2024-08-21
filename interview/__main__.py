@@ -8,3 +8,4 @@ def generate_input():
 
 for output in weather.process_events(generate_input()):
     print(json.dumps(output))
+    
