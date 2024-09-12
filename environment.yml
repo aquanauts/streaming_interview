@@ -10,4 +10,4 @@ dependencies:
   - mypy=1.10.0
   - pylint=3.0.4
   - pytest-cov=5.0.0
-  - pytest-watcher=0.4.2
+  - pytest-watcher=0.4.3
