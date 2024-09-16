@@ -22,7 +22,7 @@ Your goal in this interview is to change the program to correctly process these 
 Weather samples have the following keys:
 * `type` - The message type, as a string. "sample" for weather samples
 * `stationName` - A human-readable string identifying the weather station
-* `timestamp` - A UTC millisecond precision timestamp representing when the sample was taken, as an integer number. This timestamp is guaranteed never to decrease in subsequent samples. The sample below represents `Jan 1, 2023 12:00:00 AM GMT`
+* `timestamp` - A UTC millisecond precision timestamp representing when the sample was taken, as an integer number. This timestamp is guaranteed to increase in subsequent samples. The sample below represents `Jan 1, 2023 12:00:00 AM GMT`
 * `temperature` - The floating point Fahrenheit temperature
 
 ##### Example message
