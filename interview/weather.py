@@ -2,47 +2,66 @@ from typing import Any, Iterable, Generator
 
 
 def process_events(events: Iterable[dict[str, Any]]) -> Generator[dict[str, Any], None, None]:
-    stations = {}
-    latest_ts = None
+    # Dictionary to store per-station temperature extremes
+    temp_extremes = {}
+    # Track the latest timestamp seen in any sample
+    most_recent_ts = None
 
-    for msg in events:
-        msg_type = msg.get("type")
-        if msg_type == "sample":
-            station = msg["stationName"]
-            ts = msg["timestamp"]
-            temp = msg["temperature"]
-            # Update latest timestamp
-            if (latest_ts is None) or (ts > latest_ts):
-                latest_ts = ts
-            # Update station high/low
-            if station not in stations:
-                stations[station] = {"high": temp, "low": temp}
-            else:
-                stations[station]["high"] = max(stations[station]["high"], temp)
-                stations[station]["low"] = min(stations[station]["low"], temp)
-        elif msg_type == "control":
-            cmd = msg.get("command")
-            if latest_ts is None:
-                # Ignore control messages if no sample data is present
-                continue
-            if cmd == "snapshot":
-                yield {
-                    "type": "snapshot",
-                    "asOf": latest_ts,
-                    "stations": {k: dict(v) for k, v in stations.items()}
-                }
-            elif cmd == "reset":
-                yield {
-                    "type": "reset",
-                    "asOf": latest_ts
-                }
-                stations.clear()
-                latest_ts = None
-            else:
-                raise ValueError(
-                    f"Unknown control command: {cmd}. Please verify input."
-                )
+    def handle_sample(event):
+        nonlocal most_recent_ts
+        station = event["stationName"]
+        ts = event["timestamp"]
+        temp = event["temperature"]
+        if (most_recent_ts is None) or (ts > most_recent_ts):
+            most_recent_ts = ts
+        if station not in temp_extremes:
+            temp_extremes[station] = {"high": temp, "low": temp}
         else:
+            if temp > temp_extremes[station]["high"]:
+                temp_extremes[station]["high"] = temp
+            if temp < temp_extremes[station]["low"]:
+                temp_extremes[station]["low"] = temp
+
+    def handle_control(event):
+        nonlocal most_recent_ts
+        command = event.get("command")
+        if most_recent_ts is None:
+            return None
+        if command == "snapshot":
+            # Emit a snapshot of the current state for all stations
+            return {
+                "type": "snapshot",
+                "asOf": most_recent_ts,
+                "stations": {
+                    station: dict(extremes)
+                    for station, extremes in temp_extremes.items()
+                }
+            }
+        if command == "reset":
+            # Confirm reset and clear all accumulated data
+            result = {
+                "type": "reset",
+                "asOf": most_recent_ts
+            }
+            temp_extremes.clear()
+            most_recent_ts = None
+            return result
+        # Raise for unknown control commands, as required by the assignment
+        raise ValueError(
+            f"Unknown control command encountered: {command}. "
+            "Please verify input."
+        )
+
+    for event in events:
+        msg_type = event.get("type")
+        if msg_type == "sample":
+            handle_sample(event)
+        elif msg_type == "control":
+            result = handle_control(event)
+            if result is not None:
+                yield result
+        else:
+            # Raise for unknown message types, as required by the assignment
             raise ValueError(
-                f"Unknown message type: {msg_type}. Please verify input."
+                f"Unrecognized message type: {msg_type}. Please verify input."
             )
