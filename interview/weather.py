@@ -39,6 +39,10 @@ def process_events(events: Iterable[dict[str, Any]]) -> Generator[dict[str, Any]
                 stations.clear()
                 latest_ts = None
             else:
-                raise Exception(f"Unknown control command: {cmd}. Please verify input.")
+                raise ValueError(
+                    f"Unknown control command: {cmd}. Please verify input."
+                )
         else:
-            raise Exception(f"Unknown message type: {msg_type}. Please verify input.")
+            raise ValueError(
+                f"Unknown message type: {msg_type}. Please verify input."
+            )
